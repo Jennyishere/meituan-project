@@ -3,14 +3,14 @@
     <div class="add">
       <!-- reference -->
       编号:
-      <input type="text" v-model="newbrand.id" ref="bid" v-myfocus v-setcolor="'red'"/>
+      <input type="text" v-model="newbrand.id" ref="bid" v-myFocus v-setcolor="'red'"/>
       品牌名称:
       <input type="text" v-model="newbrand.bname" ref="bname"/>
       <input type="button" value="添加" @click="add" />
     </div>
     <div class="add">
       品牌名称:
-      <input type="text" placeholder="请输入搜索条件" />
+      <input type="text" placeholder="请输入搜索条件" v-model="userkey"/>
     </div>
     <div>
       <table class="tb">
@@ -21,15 +21,15 @@
             <th>创立时间</th>
             <th>操作</th>
           </tr>
-          <tr v-for="(value,index) in brandList" :key="value.id">
+          <tr v-for="(value,index) in search" :key="value.id">
             <td>{{value.id}}</td>
             <td>{{value.bname}}</td>
-            <td>{{value.btime | dateFormat('/')}}</td>
+            <td>{{value.btime | dateformat}}</td>
             <td>
               <a href="#" @click.prevent="del(index)">删除</a>
             </td>
           </tr>
-          <tr v-if="brandList.length === 0">
+          <tr v-if="search.length === 0">
             <td colspan="4">没有任何的数据，请先添加</td>
           </tr>
         </tbody>
@@ -39,10 +39,12 @@
 </template>
 
 <script>
-import { myfocus, setcolor } from '../utils/mydirectives.js'
+import { myFocus, setcolor } from '../utils/mydirectives.js'
+import { dateformat } from '../utils/myfilters.js'
 export default {
   data () {
     return {
+      userkey: '', // 搜索关键字
       newbrand: {
         id: '',
         bname: '',
@@ -67,6 +69,18 @@ export default {
       ]
     }
   },
+  computed: {
+    search () {
+      let arr = []
+      for (var i = 0; i < this.brandList.length; i++) {
+        // 判断用户关键字是否包含在bname属性中
+        if (this.brandList[i].bname.indexOf(this.userkey) !== -1) {
+          arr.push(this.brandList[i])
+        }
+      }
+      return arr
+    }
+  },
   methods: {
     // 数据的添加
     add () {
@@ -80,17 +94,13 @@ export default {
   },
   // 注册指令
   directives: {
-    myfocus: myfocus,
+    myFocus: myFocus,
     setcolor
   },
   // 添加过滤器
+  // 注册过滤器
   filters: {
-    dateFormat: (data, spe) => {
-      var year = data.getFullYear()
-      var month = data.getMonth() + 1
-      var day = data.getDate()
-      return year + spe + month + spe + day
-    }
+    dateformat
   }
 }
 </script>
