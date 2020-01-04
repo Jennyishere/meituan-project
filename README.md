@@ -38,3 +38,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 - **vue-cli**：Vue 脚手架工具，快速初始化项目代码
 - **ESLint**：代码风格检查工具，规范代码书写
+
+**对axios的简单二次封装**
+参考官方文档，在src目录下建立一个utils和apis文件夹，主要是放置所有的工具模块，比如设置默认配置根路径，设置拦截器等。
+默认配置：
+拦截器：对token的设置
+统一管理Api请求
